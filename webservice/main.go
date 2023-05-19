@@ -6,14 +6,15 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
-func main(){
-	
+
+func main() {
+
 	mongo_uri := helpers.GetEnvByName("MONGO_URI")
 	db := helpers.InitDB(mongo_uri)
-	
+
 	router := gin.Default()
 	controllers.InitRoutes(db, router)
-	
-	port := helpers.GetEnvByName("API_PORT")
-	router.Run(port)
+
+	port := helpers.GetEnvByName("PORT")
+	router.Run(":" + port)
 }
