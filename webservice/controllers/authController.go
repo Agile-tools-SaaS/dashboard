@@ -8,7 +8,8 @@ import (
 )
 
 func AuthController(db *mongo.Client, router *gin.Engine) {
-	userContext := db.Database("AScore").Collection("users")
+
+	userContext := db.Database("cluster0").Collection("users")
 
 	api := router.Group("auth")
 	{
@@ -20,20 +21,6 @@ func AuthController(db *mongo.Client, router *gin.Engine) {
 		// check user is logged in
 		api.GET("", func(ctx *gin.Context) {
 			services.CheckUser(ctx, userContext)
-		})
-
-		api.PUT(":username", func(ctx *gin.Context) {
-			services.ChangeUserDetails(ctx, userContext)
-		})
-
-		// change users password
-		api.PUT(":username/changepassword", func(ctx *gin.Context) {
-			services.ChangePassword(ctx, userContext)
-		})
-
-		// delete user
-		api.DELETE(":username", func(ctx *gin.Context) {
-			services.DeleteUser(ctx, userContext)
 		})
 	}
 }

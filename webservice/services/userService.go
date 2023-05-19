@@ -5,11 +5,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func LoginUser(c *gin.Context, db *mongo.Collection) {
-
-}
-
-func CheckUser(c *gin.Context, db *mongo.Collection) {
+func CreateUser(c *gin.Context, db *mongo.Collection) {
 
 }
 

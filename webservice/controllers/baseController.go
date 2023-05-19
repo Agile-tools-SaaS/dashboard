@@ -7,4 +7,5 @@ import (
 
 func InitRoutes(db *mongo.Client, router *gin.Engine) {
 	AuthController(db, router)
+	UserController(db, router)
 }
