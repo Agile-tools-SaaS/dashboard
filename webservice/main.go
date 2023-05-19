@@ -16,5 +16,5 @@ func main() {
 	controllers.InitRoutes(db, router)
 
 	port := helpers.GetEnvByName("PORT")
-	router.Run(":" + port)
+	router.Run(":8080")
 }
