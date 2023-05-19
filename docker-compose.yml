@@ -1,0 +1,10 @@
+version: "3.6"
+services:
+  webservice:
+    container_name: AS_webservice_API
+    build: 
+      context: ./
+      dockerfile: ./webservice/Dockerfile
+    ports:
+      - "8080"
+    env_file: ./webservice/.env
