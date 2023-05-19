@@ -15,6 +15,6 @@ func main() {
 	router := gin.Default()
 	controllers.InitRoutes(db, router)
 
-	port := helpers.GetEnvByName("PORT")
+
 	router.Run(":8080")
 }
