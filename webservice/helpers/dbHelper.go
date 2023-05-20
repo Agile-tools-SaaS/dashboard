@@ -5,13 +5,11 @@ import (
 	"log"
 	"time"
 
-	"github.com/Agile-tools-SaaS/dashboard/models"
-
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func InitDB(mongo_uri string) *mongo.Client {
+func InitDB(mongo_uri string) (*mongo.Client, *context.Context) {
 	client, err := mongo.NewClient(options.Client().ApplyURI(mongo_uri))
 	if err != nil {
 		log.Fatal(err)
@@ -23,18 +21,27 @@ func InitDB(mongo_uri string) *mongo.Client {
 		log.Fatal(err)
 	}
 
-	defer client.Disconnect(ctx)
+	// defer client.Disconnect(ctx)
 
-	return client
+	return client, &ctx
 }
 
-func newRepository(table string) *models.Repository {
-	repository := new(models.Repository)
-	repository.table = table
-	return repository
+type Context struct {
+	// db         *mongo.Client
+	Context    *context.Context
+	Collection *mongo.Collection
+	Close      func()
 }
 
-func NewContext(table string) *mongo.Collection {
-	repo := newRepository(table)
-	return repo.NewConnection()
+func NewContext(table_name string) *Context {
+	mongo_uri := GetEnvByName("MONGO_URI")
+	db, db_ctx := InitDB(mongo_uri)
+
+	ctx := Context{
+		Context:    db_ctx,
+		Close:      func() { db.Disconnect(*db_ctx) },
+		Collection: db.Database("ASCore").Collection(table_name),
+	}
+
+	return &ctx
 }
