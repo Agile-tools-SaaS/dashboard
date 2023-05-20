@@ -10,7 +10,6 @@ func AuthController(router *gin.Engine) {
 	api := router.Group("auth")
 	{
 		api.POST("login", services.LoginUser)
-		api.POST("logout", services.LogoutUser)
 		api.GET("", services.CheckUser)
 	}
 }

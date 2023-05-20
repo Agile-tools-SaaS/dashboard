@@ -68,8 +68,3 @@ func CheckUser(c *gin.Context) {
 	})
 
 }
-
-func LogoutUser(c *gin.Context) {
-	db := helpers.NewContext("users")
-	defer db.Close()
-}
