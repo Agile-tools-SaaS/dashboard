@@ -1,15 +1,15 @@
 package controllers
 
 import (
-	"webservice/services"
+	"github.com/Agile-tools-SaaS/dashboard/helpers"
+
+	"github.com/Agile-tools-SaaS/dashboard/services"
 
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func UserController(db *mongo.Client, router *gin.Engine) {
-	userContext := db.Database("cluster0").Collection("users")
-
+func UserController(router *gin.Engine) {
+	userContext := helpers.NewContext("users")
 	api := router.Group("user")
 	{
 		// new user

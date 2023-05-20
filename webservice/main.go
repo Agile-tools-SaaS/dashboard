@@ -1,20 +1,14 @@
 package main
 
 import (
-	"webservice/controllers"
-	"webservice/helpers"
-
+	"github.com/Agile-tools-SaaS/dashboard/controllers"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 
-	mongo_uri := helpers.GetEnvByName("MONGO_URI")
-	db := helpers.InitDB(mongo_uri)
-
 	router := gin.Default()
-	controllers.InitRoutes(db, router)
-
+	controllers.InitRoutes(router)
 
 	router.Run(":8080")
 }
