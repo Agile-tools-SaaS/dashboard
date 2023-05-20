@@ -17,3 +17,15 @@ func (u *User) CheckUserIsEmpty() bool {
 	empty_user.Spaces = nil
 	return reflect.DeepEqual(u, empty_user)
 }
+
+func (u *User) ConvertToReturnUser() *ReturnUser {
+	return_user := new(ReturnUser)
+
+	return_user.FirstName = u.FirstName
+	return_user.Surname = u.Surname
+	return_user.DisplayImage = u.DisplayImage
+	return_user.Spaces = u.Spaces
+	return_user.Email = u.Email
+
+	return return_user
+}

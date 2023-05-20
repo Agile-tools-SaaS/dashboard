@@ -87,7 +87,62 @@ func CreateUser(c *gin.Context) {
 	})
 }
 
-func ChangePassword(c *gin.Context) {}
+func ChangePassword(c *gin.Context) {
+	db := helpers.NewContext("users")
+	defer db.Close()
+
+	user_email := c.Param("user")
+
+	isAuthenticated, email := auth_helpers.CheckAuthorized(c)
+
+	if isAuthenticated && user_email == email {
+
+		new_password_model := new(models.ChangePasswordModel)
+		c.BindJSON(&new_password_model)
+
+		user := new(models.User)
+
+		db.Collection.FindOne(*db.Context, bson.M{"email": user_email}).Decode(&user)
+
+		if err := auth_helpers.CheckPassword(user.Password, new_password_model.OldPassword); err != nil {
+			c.JSON(403, gin.H{
+				"message": "incorrect password, cannot change password",
+			})
+			return
+		}
+		hashed_password, err := auth_helpers.HashPassword(new_password_model.NewPassword)
+
+		if err != nil {
+			c.JSON(500, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		result, err := db.Collection.UpdateOne(*db.Context, bson.M{"email": user_email}, bson.M{"$set": bson.M{"password": hashed_password}})
+		if err != nil {
+			c.JSON(500, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		if result.MatchedCount == 0 {
+			c.JSON(400, gin.H{
+				"error": "Could not find user with email: " + email,
+			})
+			return
+		}
+
+		c.JSON(200, gin.H{
+			"message": "Successfully changed password",
+		})
+		return
+	}
+	c.JSON(403, gin.H{
+		"message": "Cannot change the password as you are not authenticated",
+	})
+}
 
 func ChangeUserDetails(c *gin.Context) {}
 
@@ -101,9 +156,7 @@ func DeleteUser(c *gin.Context) {
 
 	if isLoggedIn && username == user {
 
-		result := db.Collection.FindOneAndDelete(*db.Context, bson.M{"email": user})
-
-		println(result)
+		db.Collection.FindOneAndDelete(*db.Context, bson.M{"email": user})
 
 		c.JSON(200, gin.H{
 			"message": "successfully deleted the user",
@@ -135,6 +188,6 @@ func FindOneUser(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{
-		"user": find_user,
+		"user": find_user.ConvertToReturnUser(),
 	})
 }

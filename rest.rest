@@ -2,9 +2,9 @@ POST http://localhost:8080/user/
 
 {
     "firstname":"callum",
-    "surname":"mcluske",
+    "surname":"mcluskey",
     "password":"test_password",
-    "email":"test10@email.com"
+    "email":"test@email.com"
 }
 
 ###
@@ -12,18 +12,28 @@ POST http://localhost:8080/user/
 POST http://localhost:8080/auth/login
 
 {
-    "user":"test4@email.com",
-    "password":"test_password"
+    "user":"test@email.com",
+    "password":"password_test"
 }
 
 ###
 
 GET http://localhost:8080/auth
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJnby1zb2NpYWwuand0Z28uaW8iLCJleHAiOjE2ODQ1ODg2MDcsImlzcyI6Imp3dGdvLmlvIiwidXNlciI6InRlc3QxMEBlbWFpbC5jb20ifQ.6-BAYLriV-uuWgTeLnSFfj_hFyyjplix41oQBFAZuA0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJnby1zb2NpYWwuand0Z28uaW8iLCJleHAiOjE2ODQ1OTAyMTEsImlzcyI6Imp3dGdvLmlvIiwidXNlciI6InRlc3RAZW1haWwuY29tIn0.-6GUMgRo1-zJ9cVof6J0J00puFBHwmSwxan7BIqUL8g
 
 ###
 
-GET http://localhost:8080/user/test10@email.com
+GET http://localhost:8080/user/test@email.com
+
+###
+
+PUT http://localhost:8080/user/test@email.com/changepassword
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJnby1zb2NpYWwuand0Z28uaW8iLCJleHAiOjE2ODQ1OTE2MzksImlzcyI6Imp3dGdvLmlvIiwidXNlciI6InRlc3RAZW1haWwuY29tIn0.S5rYZXaBvOavFMg0Qo61UFZn_bIBRBOxeUFhfGyimlA
+
+{
+    "new_password":"password_test",
+    "old_password":"test_password"
+}
 
 ###
 
