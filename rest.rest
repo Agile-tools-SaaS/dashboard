@@ -12,7 +12,7 @@ POST http://localhost:8080/user/
 POST http://localhost:8080/auth/login
 
 {
-    "user":"test@email.com",
+    "user":"changed_email",
     "password":"password_test"
 }
 
@@ -23,7 +23,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJnby1zb2NpYWwuand0
 
 ###
 
-GET http://localhost:8080/user/test@email.com
+GET http://localhost:8080/user/changed_email
 
 ###
 
@@ -33,6 +33,18 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJnby1zb2NpYWwuand0
 {
     "new_password":"password_test",
     "old_password":"test_password"
+}
+
+###
+
+PUT http://localhost:8080/user/changed_email
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJnby1zb2NpYWwuand0Z28uaW8iLCJleHAiOjE2ODQ1OTIxMTQsImlzcyI6Imp3dGdvLmlvIiwidXNlciI6ImNoYW5nZWRfZW1haWwifQ.r15REkXcum6weJqIOnQmiUetnr9PTSRwJOhyf6gwyFk
+
+{
+    "firstname":"fake_email",
+    "surname":"changed_surname",
+    "email":"fake_email@email.com",
+    "display_image":"changed_display_image"
 }
 
 ###

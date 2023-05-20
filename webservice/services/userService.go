@@ -144,7 +144,63 @@ func ChangePassword(c *gin.Context) {
 	})
 }
 
-func ChangeUserDetails(c *gin.Context) {}
+func ChangeUserDetails(c *gin.Context) {
+	db := helpers.NewContext("users")
+	defer db.Close()
+
+	user_email := c.Param("user")
+
+	isAuthenticated, email := auth_helpers.CheckAuthorized(c)
+
+	if isAuthenticated && user_email == email {
+
+		new_change_details_user_model := new(models.ChangeAccountDetailsModel)
+		c.BindJSON(&new_change_details_user_model)
+
+		find_user := new(models.User)
+
+		db.Collection.FindOne(*db.Context, bson.M{"email": new_change_details_user_model.Email}).Decode(&find_user)
+
+		if !find_user.CheckUserIsEmpty() {
+			c.JSON(400, gin.H{
+				"message": "User Already Exists",
+			})
+			return
+		}
+
+		new_change_details_user_model.Email = strings.TrimSpace(strings.ToLower(new_change_details_user_model.Email))
+
+		if checkmail.ValidateFormat(new_change_details_user_model.Email) != nil {
+			c.JSON(400, gin.H{
+				"error": "Invalid email format",
+			})
+			return
+		}
+
+		result, err := db.Collection.UpdateOne(*db.Context, bson.M{"email": user_email}, bson.M{"$set": new_change_details_user_model})
+		if err != nil {
+			c.JSON(500, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		if result.MatchedCount == 0 {
+			c.JSON(400, gin.H{
+				"error": "Could not find user with email: " + email,
+			})
+			return
+		}
+
+		c.JSON(200, gin.H{
+			"message": "Successfully changed account details",
+		})
+		return
+	}
+	c.JSON(403, gin.H{
+		"message": "Cannot change account details as you are not authenticated",
+	})
+}
 
 func DeleteUser(c *gin.Context) {
 	db := helpers.NewContext("users")
