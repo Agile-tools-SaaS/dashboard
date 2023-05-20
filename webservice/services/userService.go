@@ -2,9 +2,11 @@ package services
 
 import (
 	"strings"
+	"time"
 
 	"github.com/Agile-tools-SaaS/dashboard/helpers"
 	auth_helpers "github.com/Agile-tools-SaaS/dashboard/helpers/auth"
+	"go.mongodb.org/mongo-driver/bson"
 
 	models "github.com/Agile-tools-SaaS/dashboard/models/user"
 
@@ -12,9 +14,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CreateUser(c *gin.Context, db *helpers.Context) {
+func CreateUser(c *gin.Context) {
 
-	defer db.Close()
+	db := helpers.NewContext("users")
 
 	user := new(models.User)
 
@@ -36,7 +38,19 @@ func CreateUser(c *gin.Context, db *helpers.Context) {
 
 	user.Password = string(hashed_password)
 	user.DisplayImage = ""
-	user.Spaces = []string{}
+	user.Spaces = &([]string{})
+	user.CreatedAt = time.Now().String()
+
+	var find_user models.User
+
+	db.Collection.FindOne(*db.Context, bson.M{"email": user.Email}).Decode(&find_user)
+
+	if !find_user.CheckUserIsEmpty() {
+		c.JSON(400, gin.H{
+			"message": "User Already Exists",
+		})
+		return
+	}
 
 	if strings.TrimSpace(user.FirstName) == "" && strings.TrimSpace(user.Surname) == "" && strings.TrimSpace(user.Email) == "" && strings.TrimSpace(user.Password) == "" {
 		c.JSON(400, gin.H{
@@ -54,6 +68,7 @@ func CreateUser(c *gin.Context, db *helpers.Context) {
 		})
 		return
 	}
+
 	_, err = db.Collection.InsertOne(c, &user)
 	if err != nil {
 		if err.Error() == "User already exists" {
@@ -72,14 +87,30 @@ func CreateUser(c *gin.Context, db *helpers.Context) {
 	})
 }
 
-func ChangePassword(c *gin.Context, db *helpers.Context) {
+func ChangePassword(c *gin.Context) {}
 
-}
+func ChangeUserDetails(c *gin.Context) {}
 
-func ChangeUserDetails(c *gin.Context, db *helpers.Context) {
+func DeleteUser(c *gin.Context) {}
 
-}
+func FindOneUser(c *gin.Context) {
+	db := helpers.NewContext("users")
+	defer db.Close()
 
-func DeleteUser(c *gin.Context, db *helpers.Context) {
+	user := c.Param("user")
 
+	find_user := new(models.User)
+
+	db.Collection.FindOne(*db.Context, bson.M{"email": user}).Decode(&find_user)
+
+	if find_user.CheckUserIsEmpty() {
+		c.JSON(400, gin.H{
+			"message": "User not found",
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"user": find_user,
+	})
 }

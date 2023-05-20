@@ -10,7 +10,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func LoginUser(c *gin.Context, db *helpers.Context) {
+func LoginUser(c *gin.Context) {
+	db := helpers.NewContext("users")
+	defer db.Close()
 	user_login := new(models.LoginUser)
 	if err := c.ShouldBindJSON(&user_login); err != nil {
 		c.JSON(500, gin.H{
@@ -49,7 +51,7 @@ func LoginUser(c *gin.Context, db *helpers.Context) {
 	})
 }
 
-func CheckUser(c *gin.Context, db *helpers.Context) {
+func CheckUser(c *gin.Context) {
 
 	isAuthenticated, email := auth_helpers.CheckAuthorized(c)
 
@@ -67,6 +69,7 @@ func CheckUser(c *gin.Context, db *helpers.Context) {
 
 }
 
-func LogoutUser(c *gin.Context, db *helpers.Context) {
-
+func LogoutUser(c *gin.Context) {
+	db := helpers.NewContext("users")
+	defer db.Close()
 }
