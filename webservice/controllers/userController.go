@@ -13,7 +13,7 @@ func UserController(router *gin.Engine) {
 		api.POST("", services.CreateUser)
 		api.PUT(":username", services.ChangeUserDetails)
 		api.PUT(":username/changepassword", services.ChangePassword)
-		api.DELETE(":username", services.DeleteUser)
+		api.DELETE(":user", services.DeleteUser)
 
 		api.GET(":user", services.FindOneUser)
 	}

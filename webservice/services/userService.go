@@ -91,7 +91,31 @@ func ChangePassword(c *gin.Context) {}
 
 func ChangeUserDetails(c *gin.Context) {}
 
-func DeleteUser(c *gin.Context) {}
+func DeleteUser(c *gin.Context) {
+	db := helpers.NewContext("users")
+	defer db.Close()
+
+	user := c.Param("user")
+
+	isLoggedIn, username := auth_helpers.CheckAuthorized(c)
+
+	if isLoggedIn && username == user {
+
+		result := db.Collection.FindOneAndDelete(*db.Context, bson.M{"email": user})
+
+		println(result)
+
+		c.JSON(200, gin.H{
+			"message": "successfully deleted the user",
+		})
+		return
+	}
+
+	c.JSON(403, gin.H{
+		"message": "you are not authorized to delete this user",
+	})
+
+}
 
 func FindOneUser(c *gin.Context) {
 	db := helpers.NewContext("users")

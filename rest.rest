@@ -12,7 +12,7 @@ POST http://localhost:8080/user/
 POST http://localhost:8080/auth/login
 
 {
-    "user":"test10@email.com",
+    "user":"test4@email.com",
     "password":"test_password"
 }
 
@@ -24,3 +24,8 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJnby1zb2NpYWwuand0
 ###
 
 GET http://localhost:8080/user/test10@email.com
+
+###
+
+DELETE http://localhost:8080/user/test4@email.com
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJnby1zb2NpYWwuand0Z28uaW8iLCJleHAiOjE2ODQ1ODkzMjQsImlzcyI6Imp3dGdvLmlvIiwidXNlciI6InRlc3Q0QGVtYWlsLmNvbSJ9.cHVh9KcmzO1mHKD9IPVRpabDP8V6TQDeVnL6DjuZ0lM
