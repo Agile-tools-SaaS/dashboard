@@ -1,0 +1,22 @@
+POST http://localhost:8080/user/
+
+{
+    "first_name":"callum2",
+    "surname":"mcluskey2",
+    "password":"test_password",
+    "email":"test2@email.com"
+}
+
+###
+
+POST http://localhost:8080/auth/login
+
+{
+    "user":"test@email.com",
+    "password":"test_password"
+}
+
+###
+
+GET http://localhost:8080/auth
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJnby1zb2NpYWwuand0Z28uaW8iLCJleHAiOjE2ODQ1ODYyMDcsImlzcyI6Imp3dGdvLmlvIiwidXNlciI6InRlc3RAZW1haWwuY29tIn0.IQmr_P_5o6KgL0zvVdRa-xwjWkl3qRgHMHMqpd2euNs

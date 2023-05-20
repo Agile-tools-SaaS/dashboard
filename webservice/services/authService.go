@@ -51,6 +51,20 @@ func LoginUser(c *gin.Context, db *helpers.Context) {
 
 func CheckUser(c *gin.Context, db *helpers.Context) {
 
+	isAuthenticated, email := auth_helpers.CheckAuthorized(c)
+
+	if isAuthenticated {
+		c.JSON(200, gin.H{
+			"isAuthenticated": isAuthenticated,
+			"username":        email,
+		})
+		return
+	}
+	c.JSON(403, gin.H{
+		"isAuthenticated": isAuthenticated,
+		"message":         "User not authenticated",
+	})
+
 }
 
 func LogoutUser(c *gin.Context, db *helpers.Context) {

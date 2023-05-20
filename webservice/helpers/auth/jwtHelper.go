@@ -8,9 +8,9 @@ import (
 	jwt "github.com/golang-jwt/jwt/v4"
 )
 
-func GenerateJWT(username string) (string, error) {
+func GenerateJWT(email string) (string, error) {
 	claims := jwt.MapClaims{}
-	claims["user"] = username
+	claims["user"] = email
 	claims["aud"] = "go-social.jwtgo.io"
 	claims["iss"] = "jwtgo.io"
 	claims["exp"] = time.Now().Add(time.Hour * 1).Unix()
@@ -25,7 +25,7 @@ func GenerateJWT(username string) (string, error) {
 	return newToken, nil
 }
 
-func CheckJWT(token string, username *string) error {
+func CheckJWT(token string, email *string) error {
 	t, err := jwt.Parse(token, func(tkn *jwt.Token) (interface{}, error) {
 		return []byte(os.Getenv("JWT_KEY")), nil
 	})
@@ -44,7 +44,7 @@ func CheckJWT(token string, username *string) error {
 	}
 
 	claims := t.Claims.(jwt.MapClaims)
-	*username = claims["user"].(string)
+	*email = claims["user"].(string)
 
 	return nil
 }
