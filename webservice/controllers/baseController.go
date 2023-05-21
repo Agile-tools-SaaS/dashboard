@@ -7,4 +7,5 @@ import (
 func InitRoutes(router *gin.Engine) {
 	AuthController(router)
 	UserController(router)
+	SpacesController(router)
 }

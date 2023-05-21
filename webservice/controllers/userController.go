@@ -16,5 +16,7 @@ func UserController(router *gin.Engine) {
 		api.DELETE(":user", services.DeleteUser)
 
 		api.GET(":user", services.FindOneUser)
+		api.GET(":user/spaces", services.GetSpacesByUserAndFilterWithPagination)
+
 	}
 }

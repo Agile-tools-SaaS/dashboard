@@ -1,53 +1,28 @@
-POST http://localhost:8080/user/
+###
+
+PUT http://localhost:8080/space/646a192da53257300c2ba458
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJnby1zb2NpYWwuand0Z28uaW8iLCJleHAiOjE2ODQ2Nzg0MzcsImlzcyI6Imp3dGdvLmlvIiwidXNlciI6InRlc3QzQGVtYWlsLmNvbSJ9.HYvfHg_zcfZyTtXHcMUuIPJEQ3wTz6RPSC74pUECGbo
 
 {
-    "firstname":"callum",
-    "surname":"mcluskey",
-    "password":"test_password",
-    "email":"test@email.com"
+    "name": "Changed Company name"
 }
 
-###
+### delete space
 
-POST http://localhost:8080/auth/login
+DELETE http://localhost:8080/space/646a192da53257300c2ba458
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJnby1zb2NpYWwuand0Z28uaW8iLCJleHAiOjE2ODQ2Nzg0MzcsImlzcyI6Imp3dGdvLmlvIiwidXNlciI6InRlc3QzQGVtYWlsLmNvbSJ9.HYvfHg_zcfZyTtXHcMUuIPJEQ3wTz6RPSC74pUECGbo
+
+### 
+
+POST http://localhost:8080/space/646a1ce2024dc26b3d4809d2/file
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJnby1zb2NpYWwuand0Z28uaW8iLCJleHAiOjE2ODQ2NzkzOTMsImlzcyI6Imp3dGdvLmlvIiwidXNlciI6InRlc3QzQGVtYWlsLmNvbSJ9.KOLdRd7svgd1oixZgQmaGqmRFWpHXV4RxjLTJMFO2GQ
 
 {
-    "user":"changed_email",
-    "password":"password_test"
+    "name":"23S1",
+    "content":"{\"message\": \"Some JSON content\"}"
 }
 
-###
+### 
 
-GET http://localhost:8080/auth
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJnby1zb2NpYWwuand0Z28uaW8iLCJleHAiOjE2ODQ1OTAyMTEsImlzcyI6Imp3dGdvLmlvIiwidXNlciI6InRlc3RAZW1haWwuY29tIn0.-6GUMgRo1-zJ9cVof6J0J00puFBHwmSwxan7BIqUL8g
-
-###
-
-GET http://localhost:8080/user/changed_email
-
-###
-
-PUT http://localhost:8080/user/test@email.com/changepassword
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJnby1zb2NpYWwuand0Z28uaW8iLCJleHAiOjE2ODQ1OTE2MzksImlzcyI6Imp3dGdvLmlvIiwidXNlciI6InRlc3RAZW1haWwuY29tIn0.S5rYZXaBvOavFMg0Qo61UFZn_bIBRBOxeUFhfGyimlA
-
-{
-    "new_password":"password_test",
-    "old_password":"test_password"
-}
-
-###
-
-PUT http://localhost:8080/user/changed_email
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJnby1zb2NpYWwuand0Z28uaW8iLCJleHAiOjE2ODQ1OTIxMTQsImlzcyI6Imp3dGdvLmlvIiwidXNlciI6ImNoYW5nZWRfZW1haWwifQ.r15REkXcum6weJqIOnQmiUetnr9PTSRwJOhyf6gwyFk
-
-{
-    "firstname":"fake_email",
-    "surname":"changed_surname",
-    "email":"fake_email@email.com",
-    "display_image":"changed_display_image"
-}
-
-###
-
-DELETE http://localhost:8080/user/test4@email.com
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJnby1zb2NpYWwuand0Z28uaW8iLCJleHAiOjE2ODQ1ODkzMjQsImlzcyI6Imp3dGdvLmlvIiwidXNlciI6InRlc3Q0QGVtYWlsLmNvbSJ9.cHVh9KcmzO1mHKD9IPVRpabDP8V6TQDeVnL6DjuZ0lM
+GET http://localhost:8080/space/646a1ce2024dc26b3d4809d2/file/646a1d3b024dc26b3d4809d5
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJnby1zb2NpYWwuand0Z28uaW8iLCJleHAiOjE2ODQ2NzkzOTMsImlzcyI6Imp3dGdvLmlvIiwidXNlciI6InRlc3QzQGVtYWlsLmNvbSJ9.KOLdRd7svgd1oixZgQmaGqmRFWpHXV4RxjLTJMFO2GQ

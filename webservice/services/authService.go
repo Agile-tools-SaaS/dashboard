@@ -5,6 +5,7 @@ import (
 
 	"github.com/Agile-tools-SaaS/dashboard/helpers"
 	auth_helpers "github.com/Agile-tools-SaaS/dashboard/helpers/auth"
+	http_response "github.com/Agile-tools-SaaS/dashboard/helpers/http"
 	models "github.com/Agile-tools-SaaS/dashboard/models/user"
 
 	"github.com/gin-gonic/gin"
@@ -15,40 +16,28 @@ func LoginUser(c *gin.Context) {
 	defer db.Close()
 	user_login := new(models.LoginUser)
 	if err := c.ShouldBindJSON(&user_login); err != nil {
-		c.JSON(500, gin.H{
-			"error": err.Error(),
-		})
+		http_response.ServerError(c, err.Error())
 		return
 	}
 	if strings.TrimSpace(user_login.User) == "" && strings.TrimSpace(user_login.Password) == "" {
-		c.JSON(400, gin.H{
-			"error": "Fill in all the require fields",
-		})
+		http_response.Bad(c, "Fill in all the required fields")
 		return
 	}
 	username, err := user_login.UserLogin(db)
 	if err != nil {
 		if err.Error() == "The user does not exist" || err.Error() == "Wrong password" {
-			c.JSON(400, gin.H{
-				"error": err.Error(),
-			})
+			http_response.Bad(c, err.Error())
 			return
 		}
-		c.JSON(500, gin.H{
-			"error": err.Error(),
-		})
+		http_response.Bad(c, err.Error())
 		return
 	}
 	token, err := auth_helpers.GenerateJWT(username)
 	if err != nil {
-		c.JSON(400, gin.H{
-			"error": err.Error(),
-		})
+		http_response.Bad(c, err.Error())
 		return
 	}
-	c.JSON(200, gin.H{
-		"token": token,
-	})
+	http_response.Ok(c, gin.H{"token": token}, "")
 }
 
 func CheckUser(c *gin.Context) {
@@ -56,15 +45,8 @@ func CheckUser(c *gin.Context) {
 	isAuthenticated, email := auth_helpers.CheckAuthorized(c)
 
 	if isAuthenticated {
-		c.JSON(200, gin.H{
-			"isAuthenticated": isAuthenticated,
-			"username":        email,
-		})
+		http_response.Ok(c, gin.H{"is_authenticated": isAuthenticated, "email": email}, "")
 		return
 	}
-	c.JSON(403, gin.H{
-		"isAuthenticated": isAuthenticated,
-		"message":         "User not authenticated",
-	})
-
+	http_response.Forbidden(c, "User not authenticated")
 }
