@@ -12,5 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Build the Docker image
+      - name: Build the apis Docker image
         run: docker build . --file webservice/Dockerfile --tag my-image-name:$(date +%s)
+        
+  build-frontend:
+    needs: build-backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the frontends Docker image
+        run: docker build . --file dashboardui/Dockerfile --tag my-image-name:$(date +%s)
