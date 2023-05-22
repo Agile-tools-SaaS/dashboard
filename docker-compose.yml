@@ -19,5 +19,5 @@ services:
       - "443:443"
     depends_on:
       - webservice
-    #volumes:
-     # - /data/certs:/etc/nginx/certs
+    volumes:
+     - /data/certs:/etc/nginx/certs
