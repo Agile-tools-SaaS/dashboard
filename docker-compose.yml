@@ -8,3 +8,16 @@ services:
     ports:
       - "8080"
     env_file: ./webservice/.env
+
+  dashboardui:
+    container_name: AS_dashboardui_client
+    build: 
+      context: ./
+      dockerfile: ./dashboardui/Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - webservice
+    #volumes:
+     # - /data/certs:/etc/nginx/certs
