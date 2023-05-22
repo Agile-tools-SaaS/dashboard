@@ -1,6 +1,6 @@
 import { Head } from "next/document";
 
-export default function Home() {
+export default function Custom404() {
   return (
     <>
       <Head>
