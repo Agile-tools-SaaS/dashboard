@@ -10,10 +10,12 @@ services:
     env_file: ./webservice/.env
 
   socketservice:
+    depends_on:
+      - webservice
     container_name: AS_socketservice_API
     build:
       context: ./
-      dockerfile: ./socketservice/dockerfile
+      dockerfile: ./socketservice/Dockerfile
     ports:
       - "3001"
     env_file: ./socketservice/.env
@@ -26,6 +28,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    depends_on: [webservice,socketservice]
+    depends_on: 
+      - socketservice
     volumes:
      - /data/certs:/etc/nginx/certs
