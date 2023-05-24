@@ -27,6 +27,7 @@ func CreateSpace(c *gin.Context) {
 	space.Files = &[]space_models.SpaceFile{}
 	space.Id = primitive.NewObjectID()
 	space.AdminUsers = &[]string{email}
+	space.Templates = &[]string{}
 	space.Users = &[]string{email}
 
 	if err := c.ShouldBindJSON(&space); err != nil {

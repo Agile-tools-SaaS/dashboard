@@ -6,7 +6,9 @@ export default function Account() {
       <Head>
         <title></title>
       </Head>
-      <main></main>
+      <main>
+        <p>Account page</p>
+      </main>
     </>
   );
 }

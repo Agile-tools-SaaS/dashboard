@@ -13,6 +13,7 @@ type Space struct {
 	Files      *[]SpaceFile       `bson:"files"`
 	Users      *[]string          `bson:"users"`
 	AdminUsers *[]string          `bson:"admin_users" json:"admin_users"`
+	Templates  *[]string          `bson:"templates" json:"templates"`
 }
 
 func (s *Space) CheckSpaceIsEmpty() bool {
@@ -20,6 +21,7 @@ func (s *Space) CheckSpaceIsEmpty() bool {
 	empty_user.Users = nil
 	empty_user.AdminUsers = nil
 	empty_user.Files = nil
+	empty_user.Templates = nil
 	return reflect.DeepEqual(s, empty_user)
 }
 

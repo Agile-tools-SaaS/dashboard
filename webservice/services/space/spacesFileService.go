@@ -67,6 +67,7 @@ func AddFileToSpace(c *gin.Context) {
 
 	http_response.Ok_no_body(c, "Successfully added file to space")
 }
+
 func GetSpaceFileByFileNameAndSpaceName(c *gin.Context) {
 	db := helpers.NewContext("spaces")
 	defer db.Close()
