@@ -9,6 +9,15 @@ services:
       - "8080"
     env_file: ./webservice/.env
 
+  socketservice:
+    container_name: AS_socketservice_API
+    build:
+      context: ./
+      dockerfile: ./socketservice/dockerfile
+    ports:
+      - "3001"
+    env_file: ./socketservice/.env
+    
   dashboardui:
     container_name: AS_dashboardui_client
     build: 
