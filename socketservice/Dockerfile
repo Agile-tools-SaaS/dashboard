@@ -1,7 +1,7 @@
 FROM node:19-alpine as socketservice
 
 WORKDIR /socketservice
-COPY package*.json ./
+COPY /socketservice/package*.json ./
 RUN npm install
 COPY . .
 

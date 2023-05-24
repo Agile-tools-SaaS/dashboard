@@ -17,7 +17,7 @@ services:
     ports:
       - "3001"
     env_file: ./socketservice/.env
-    
+
   dashboardui:
     container_name: AS_dashboardui_client
     build: 
@@ -26,7 +26,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    depends_on:
-      - webservice
+    depends_on: [webservice,socketservice]
     volumes:
      - /data/certs:/etc/nginx/certs
