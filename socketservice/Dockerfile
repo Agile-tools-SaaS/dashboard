@@ -1,9 +1,9 @@
 FROM node:19-alpine as socketservice
 
 WORKDIR /socketservice
-COPY /socketservice/package*.json ./
+COPY /socketservice/package*.json /socketservice/
 RUN npm install
-COPY . .
+COPY /socketservice /socketservice/
 
 EXPOSE 3001
 
