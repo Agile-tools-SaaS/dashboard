@@ -29,6 +29,10 @@ export function AuthProvider({
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingInitial, setLoadingInitial] = useState<boolean>(true);
 
+  useEffect(() => {
+    setLoadingInitial(false);
+  }, []);
+
   // NEEDS TYPED PROPERLY AND BOTH NEED FILLED OUT
   // - maybe also needs a check for if the user is still logged in. (not sure if this is needed as a 403 should have
   // logic to check if the user is supposed to be here and if they should be redirected to login or main page.)
