@@ -9,7 +9,6 @@ export function useSocket() {
   useEffect(() => {
     socket &&
       socket.on("message", (recv: any) => {
-        console.log(recv);
         if (recv) {
           setPageData(recv);
         }
