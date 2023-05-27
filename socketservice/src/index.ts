@@ -1,10 +1,11 @@
 import express, { Express, Request, Response } from "express";
+import { Server as HTTPServer } from "http";
 import { Socket, Server as SocketServer } from "socket.io";
 
 const app: Express = express();
 const port = 3001;
 const http = require("http");
-const server = http.createServer(app);
+const server: HTTPServer = http.createServer(app);
 const { Server } = require("socket.io");
 const io: SocketServer = new Server(server, {
   cors: {
