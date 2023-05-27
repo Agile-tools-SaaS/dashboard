@@ -21,7 +21,6 @@ export function useSocket() {
     if (socket_url) {
       setSocket(
         io(socket_url, {
-          path:"/socket/socket.io/",
           reconnectionDelay: 10000,
           auth: {
             token: getAuthToken(),
