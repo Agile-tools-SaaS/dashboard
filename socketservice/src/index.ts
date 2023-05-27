@@ -8,7 +8,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io: SocketServer = new Server(server, {
   cors: {
-    origin: [process.env.FRONTEND_URL, process.env.MAIN_API_URL],
+    origin: "*",
   },
 });
 
@@ -31,25 +31,41 @@ const checkUserHasAccessToBoard = (
 
 io.on("connect", async (socket: Socket) => {
   // endpoint to check if user has access to the server
-  let has_access = await checkUserHasAccessToBoard(
-    socket.request.headers["Authorization"] as string
+  // let has_access = await checkUserHasAccessToBoard(
+  //   socket.request.headers["Authorization"] as string
+  // );
+
+  socket.join(
+    `${socket.handshake.query["space_id"]}-${socket.handshake.query["board_id"]}`
   );
 
-  if (has_access) {
-    // join user
-    // check if users are in board
-    let boardUsers = [];
+  socket.emit("message", "Welcome");
 
-    if (boardUsers.length === 0) {
-      getBoard("", "").then(() => {
-        onBoardConnect(socket);
-      });
-    } else {
-      onBoardConnect(socket);
-    }
-  } else {
-    // reject the request
-  }
+  socket.on("disconnect", () => {
+    console.log(
+      `🛑 socket disconnected - ${socket.handshake.query["space_id"]}-${socket.handshake.query["board_id"]}`
+    );
+  });
+
+  console.log("connected", socket.handshake.query, socket.handshake.auth);
+
+  let has_access = true;
+
+  // if (has_access) {
+  //   // join user
+  //   // check if users are in board
+  //   let boardUsers = [];
+
+  //   if (boardUsers.length === 0) {
+  //     getBoard("", "").then(() => {
+  //       onBoardConnect(socket);
+  //     });
+  //   } else {
+  //     onBoardConnect(socket);
+  //   }
+  // } else {
+  //   // reject the request
+  // }
 });
 
 server.listen(port, () => {

@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import { useEffect } from "react";
 
 /**
  * homepage show all spaces calls get all spaces,
