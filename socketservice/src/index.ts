@@ -19,7 +19,10 @@ const checkUserHasAccessToBoard = (
 io.on("connect", async (socket: Socket) => {
   let room_name = `${socket.handshake.query["space_id"]}-${socket.handshake.query["board_id"]}`;
   socket.join(room_name);
-  socket.emit("message", "Welcome - From socketservice");
+  socket.emit(
+    "message",
+    `Welcome ${socket.handshake.query["user"]}, to room [${room_name}] - From socketservice`
+  );
 
   socket.on("remove_user", () => {});
 

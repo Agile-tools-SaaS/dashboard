@@ -11,7 +11,7 @@ export default function BoardView() {
 
   useEffect(() => {
     if (board_id && space_id) {
-      initialiseConnection(board_id as string, space_id as string);
+      initialiseConnection(space_id as string, board_id as string);
     }
 
     return () => {
