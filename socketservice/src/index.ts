@@ -9,60 +9,36 @@ const server: HTTPServer = http.createServer(app);
 const { Server } = require("socket.io");
 const io: SocketServer = new Server(server);
 
-const getBoard = (board_id: string, space_id: string): Promise<any> => {
-  return new Promise(() => true);
-};
-
-const onBoardConnect = (socket: Socket) => {
-  console.log("connected");
-  socket.on("disconnect", () => {});
-  socket.on("remove_user", () => {});
-  socket.on("save_board", () => {});
-};
-
 const checkUserHasAccessToBoard = (
-  Authorization_token: string
-): Promise<any> => {
-  return new Promise(() => true);
+  Authorization_token: string,
+  space_id: string
+) => {
+  return true;
 };
 
-io.on("connect", async (socket: Socket) => {
-  // endpoint to check if user has access to the server
-  // let has_access = await checkUserHasAccessToBoard(
-  //   socket.request.headers["Authorization"] as string
-  // );
+io.of("/board").on("connect", async (socket: Socket) => {
+  if (
+    checkUserHasAccessToBoard(
+      socket.handshake.auth[0],
+      socket.handshake.query["space_id"] as string
+    )
+  ) {
+    let room_name = `${socket.handshake.query["space_id"]}-${socket.handshake.query["board_id"]}`;
+    socket.join(room_name);
+    socket.to(room_name).emit("message", "Welcome - From socketservice");
 
-  socket.join(
-    `${socket.handshake.query["space_id"]}-${socket.handshake.query["board_id"]}`
-  );
+    socket.on("remove_user", () => {});
 
-  socket.emit("message", "Welcome");
+    socket.on("save_board", () => {});
 
-  socket.on("disconnect", () => {
-    console.log(
-      `🛑 socket disconnected - ${socket.handshake.query["space_id"]}-${socket.handshake.query["board_id"]}`
-    );
-  });
+    socket.on("disconnect", () => {
+      console.log(
+        `🛑 socket disconnected - ${socket.handshake.query["space_id"]}-${socket.handshake.query["board_id"]}`
+      );
+    });
 
-  console.log("connected", socket.handshake.query, socket.handshake.auth);
-
-  let has_access = true;
-
-  // if (has_access) {
-  //   // join user
-  //   // check if users are in board
-  //   let boardUsers = [];
-
-  //   if (boardUsers.length === 0) {
-  //     getBoard("", "").then(() => {
-  //       onBoardConnect(socket);
-  //     });
-  //   } else {
-  //     onBoardConnect(socket);
-  //   }
-  // } else {
-  //   // reject the request
-  // }
+    console.log("connected", socket.handshake.query, socket.handshake.auth);
+  }
 });
 
 server.listen(port, () => {
