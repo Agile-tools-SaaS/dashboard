@@ -20,7 +20,7 @@ export function useSocket() {
     let socket_url = process.env.NEXT_PUBLIC_SOCKET_API_URL;
     if (socket_url) {
       setSocket(
-        io(`${socket_url}/board`, {
+        io(socket_url, {
           reconnectionDelay: 10000,
           auth: {
             token: getAuthToken(),

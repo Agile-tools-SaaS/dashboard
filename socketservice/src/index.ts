@@ -16,29 +16,22 @@ const checkUserHasAccessToBoard = (
   return true;
 };
 
-io.of("/board").on("connect", async (socket: Socket) => {
-  if (
-    checkUserHasAccessToBoard(
-      socket.handshake.auth[0],
-      socket.handshake.query["space_id"] as string
-    )
-  ) {
-    let room_name = `${socket.handshake.query["space_id"]}-${socket.handshake.query["board_id"]}`;
-    socket.join(room_name);
-    socket.to(room_name).emit("message", "Welcome - From socketservice");
+io.on("connect", async (socket: Socket) => {
+  let room_name = `${socket.handshake.query["space_id"]}-${socket.handshake.query["board_id"]}`;
+  socket.join(room_name);
+  socket.emit("message", "Welcome - From socketservice");
 
-    socket.on("remove_user", () => {});
+  socket.on("remove_user", () => {});
 
-    socket.on("save_board", () => {});
+  socket.on("save_board", () => {});
 
-    socket.on("disconnect", () => {
-      console.log(
-        `🛑 socket disconnected - ${socket.handshake.query["space_id"]}-${socket.handshake.query["board_id"]}`
-      );
-    });
+  socket.on("disconnect", () => {
+    console.log(
+      `🛑 socket disconnected - ${socket.handshake.query["space_id"]}-${socket.handshake.query["board_id"]}`
+    );
+  });
 
-    console.log("connected", socket.handshake.query, socket.handshake.auth);
-  }
+  console.log("connected", socket.handshake.query, socket.handshake.auth);
 });
 
 server.listen(port, () => {
