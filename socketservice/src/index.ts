@@ -7,11 +7,7 @@ const port = 3001;
 const http = require("http");
 const server: HTTPServer = http.createServer(app);
 const { Server } = require("socket.io");
-const io: SocketServer = new Server(server, {
-  cors: {
-    origin: "*",
-  },
-});
+const io: SocketServer = new Server(server);
 
 const getBoard = (board_id: string, space_id: string): Promise<any> => {
   return new Promise(() => true);
