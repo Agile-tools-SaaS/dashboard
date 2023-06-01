@@ -44,4 +44,4 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: root
           password: ${{ secrets.SSH_PASS }}
-          script: cd dashboard && git pull https://${{secrets.GH_NAME}}:${{secrets.GH_PAT}}@github.com/Agile-tools-SaaS/dashboard.git && bash scripts/run.sh
+          script: cd dashboard && git pull && bash scripts/run.sh
