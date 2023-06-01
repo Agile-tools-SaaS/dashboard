@@ -1,23 +1,48 @@
+import { Pointer } from "@/components/mouse/pointer";
+import { useMousePos } from "@/hooks/useMousePos";
 import { useSocket } from "@/hooks/useSocket";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import "@/styles/board/main.module.scss";
+import { BoardContainer } from "@/components/board/container";
+import { useEffect, useRef, useState } from "react";
+import { useInterval } from "@/hooks/useInterval";
+import { motion } from "framer-motion";
+import { UsersBox } from "@/components/board/userBox";
 
+interface mouseCoordinates {
+  x: number;
+  y: number;
+}
 export default function BoardView() {
   const router = useRouter();
+  let { board_id, space_id, user } = router.query;
 
-  let { board_id, space_id } = router.query;
-  const { initialiseConnection, pageData, disconnect } = useSocket();
+  const { users, userPositions, pageData, UpdateUserPos, message } = useSocket(
+    board_id,
+    space_id,
+    user
+  );
+
+  // let mousePos = useMousePos();
+
+  const [mousePos, setMousePos] = useState<mouseCoordinates>({ x: 0, y: 0 });
 
   useEffect(() => {
-    if (board_id && space_id) {
-      initialiseConnection(space_id as string, board_id as string);
-    }
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
 
     return () => {
-      disconnect();
+      window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [board_id, space_id]);
+  }, []);
+
+  useInterval(() => {
+    UpdateUserPos(user as string, mousePos);
+  }, 300);
 
   return (
     <>
@@ -25,9 +50,41 @@ export default function BoardView() {
         <title></title>
       </Head>
       <main>
-        <p> board: {board_id}</p>
-        <p> space: {space_id}</p>
-        <p>{JSON.stringify(pageData)}</p>
+        <p>{message}</p>
+
+        {userPositions &&
+          users.map(
+            (x, i) =>
+              x !== user && (
+                <Pointer
+                  otherUser={true}
+                  coordinates={userPositions[x].pos ?? { x: 50, y: 50 }}
+                  user={users[i]}
+                  color={userPositions[x].color}
+                />
+              )
+          )}
+
+        {userPositions && (
+          <UsersBox
+            {...users.map((x) => ({
+              name: x as string,
+              color: userPositions[x].color as string,
+            }))}
+          />
+        )}
+
+        <BoardContainer>
+          <>
+            {userPositions && (
+              <Pointer
+                coordinates={mousePos}
+                color={userPositions[user as string]?.color}
+                user={user as string}
+              />
+            )}
+          </>
+        </BoardContainer>
       </main>
     </>
   );

@@ -16,19 +16,51 @@ const checkUserHasAccessToBoard = (
   return true;
 };
 
+const colors = [
+  "#003d5b",
+  "#91972A",
+  "#d1495b",
+  "#F5853F",
+  "#40531B",
+  "#C81D25",
+];
+
+let users: any = {};
+
 io.on("connect", async (socket: Socket) => {
   let room_name = `${socket.handshake.query["space_id"]}-${socket.handshake.query["board_id"]}`;
+  let user_name: string = socket.handshake.query["user"] as string;
   socket.join(room_name);
+  users[user_name] = {
+    pos: { x: 0, y: 0 },
+    color: colors[Math.floor(Math.random() * colors.length)],
+  };
   socket.emit(
     "message",
-    `Welcome ${socket.handshake.query["user"]}, to room [${room_name}] - From socketservice`
+    JSON.stringify({
+      welcomeMessage: `Welcome ${socket.handshake.query["user"]}, to room [${room_name}] - From socketservice`,
+      users,
+    })
   );
+
+  socket.on("updateuserpos", (recv) => {
+    let updated_user = JSON.parse(recv);
+
+    users[updated_user.user] = {
+      pos: updated_user.pos,
+      color: users[updated_user.user].color,
+    };
+    socket.emit("board_positions", JSON.stringify(users));
+  });
+
+  socket.on("change", () => {});
 
   socket.on("remove_user", () => {});
 
   socket.on("save_board", () => {});
 
   socket.on("disconnect", () => {
+    delete users[user_name];
     console.log(
       `🛑 socket disconnected - ${socket.handshake.query["space_id"]}-${socket.handshake.query["board_id"]}`
     );
