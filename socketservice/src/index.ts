@@ -48,7 +48,7 @@ io.on("connect", async (socket: Socket) => {
 
     users[updated_user.user] = {
       pos: updated_user.pos,
-      color: users[updated_user.user].color,
+      color: (users[updated_user.user] ?? {color:"rgb(60,60,60)"}).color,
     };
     socket.emit("board_positions", JSON.stringify(users));
   });
