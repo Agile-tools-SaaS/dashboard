@@ -42,7 +42,7 @@ export default function BoardView() {
 
   useInterval(() => {
     UpdateUserPos(user as string, mousePos);
-  }, 300);
+  }, 50);
 
   return (
     <>
